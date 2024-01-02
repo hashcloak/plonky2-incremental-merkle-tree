@@ -1,1 +1,2 @@
-# Incremental Merkle Tree Verification in PLonky2
+# Incremental Merkle Tree Verification in Plonky2
+

@@ -1,0 +1,3 @@
+leaf position: 743
+leaf value: "data item 743"
+Hash values in proof:
