@@ -1,3 +1,13 @@
-leaf position: 743
-leaf value: "data item 743"
+leaf position: 999
+leaf value: "data item 999"
 Hash values in proof:
+  /63urXHlmU6tcLsIuZIee5FDm8P2tVxxJsK8337xOmg=
+  iXC8N1zwWDvPH8G3dHbYwGFVKBWUK4AaqI2if4dchlk=
+  qKjxnGHf+92oPOjn0r4Uw9inowjpBTaXdH1hRQuDDMI=
+  7VLzFoijUteXH2lDJm6fhiaodfshwW3zAFDUY6Wo35Q=
+  njxunefeUV/Y7NsS9eAWxhMlEi9nFolwRGLIF7F6iNo=
+  ugrkVJQ0GfiFcqvCDFQMEt1ISnpE8ogioribMxBmRzM=
+  23VnIbbynGoAmQIaiGLhPQbvyn6HmO5gWT0SgkpJYlo=
+  dfw5F3m35HXA9FQeH2ETGFU50zbAtxY5PsuV8x/ODVE=
+  pOg2pi4NcmfvXUMy1j9nCgFgG0tP6Y8XQhLy5Lab2UQ=
+  twyFI3AqQo8V1ieqq8JEOHlihMEd4RDHelIGVlW2CTg=

@@ -30,46 +30,34 @@ def read_merkle_proof(filename):
     fp.close()
     return MerkleProof(leaf=leaf, pos=pos, hashes=hashes)
 
-# merkle_proof içerisinde
-# 1. position var. (Yani index)
-# 2. hashes var. (Yani siblings)
-# 3. leaf var.
-
-def compute_merkle_root_from_merkle_proof(merkle_proof : MerkleProof):
-    """computes a root from the given leaf and Merkle proof."""
-    pos = merkle_proof.pos
-    hashes = deque(merkle_proof.hashes)
-    root = hash_leaf(merkle_proof.leaf)
-    while hashes:
-        if pos % 2 == 0:
-            left, right = root, hashes.popleft()
-        else:
-            left, right = hashes.popleft(), root
-        root = hash_internal_node(left, right)
-        pos >>= 1
-    return root   # return the computed root
-
-def verify_merkle_proof(merkle_proof : MerkleProof):
-    """Verify a merkle proof by generating the merkle root from the
-       leaf, position and hashes and seeing if it produces the correct
-       merkle root. """
-    # Verify that proof length is correct
+# verify_merkle_proof
+def verify_merkle_proof(merkle_proof: MerkleProof):
     height = len(merkle_proof.hashes)
     assert height < MAXHEIGHT, "Proof is too long"
 
-    computedRoot = compute_merkle_root_from_merkle_proof(merkle_proof)
+    computedRoot = compute_merkle_root(merkle_proof)
     assert ROOT == computedRoot, "Verify failed"
     print('I verified the Merkle proof: leaf #{} in the committed tree is "{}".\n'.format(merkle_proof.pos,merkle_proof.leaf.decode("utf-8")))
 
-# verify_merkle_proof algoritması
-# height belirtmeye gerek yok. Çünkü heightı direk len(siblings(merkle_proof'tan alıyor.))
-# height max_heighttan küçük mü diye kontrol ediyor.
-# hardcoded ROOT var.
-# verification algoritmasında kendimiz hesaplamamız gerekir.
 
-# compute_merkle_root_from_merkle_proof
+# compute_merkle_root
+def compute_merkle_root(merkle_proof: MerkleProof):
+    pos = merkle_proof.pos
+    leaf_hash = hash_leaf(merkle_proof.leaf)
+    siblings = merkle_proof.hashes
 
-### Main program
+    height = len(siblings)
+    root = leaf_hash
+
+    for i in range(height):
+        if pos % 2 == 0:
+            root = hash_internal_node(root, siblings[i])
+        else:
+            root = hash_internal_node(siblings[i], root)
+        pos = pos // 2
+    
+    return root
+
 if __name__ == "__main__":
 
     # Read (leaf data, position of leaf, and proof) from file

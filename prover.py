@@ -34,6 +34,9 @@ def gen_leaves_for_merkle_tree():
     
     return leaves
 
+def example(x, y):
+    return x + y
+
 def gen_merkle_proof(leaves, pos):
     """Takes as input a list of leaves and a leaf position.
     Returns the a the list of hashes that prove the leaf is in 
@@ -44,7 +47,8 @@ def gen_merkle_proof(leaves, pos):
     assert height < MAXHEIGHT, "Too many leaves."
 
     # hash all the leaves
-    state = list(map(hash_leaf, leaves))  
+    state = list(map(hash_leaf, leaves))
+    print("number of elements in the state")
     print(len(state))
 
     # state is the hash of the leaves
@@ -52,27 +56,30 @@ def gen_merkle_proof(leaves, pos):
 
     # Pad the list of hashed leaves to a power of two
     padlen = (2**height)-len(leaves)
-    state += [b"\x00"] * padlen
+    state += [b"\x00"] * padlen 
 
     # initialize a list that will contain the hashes in the proof
     hashes = []
 
     level_pos = pos    # local copy of pos
 
+    new_state = state
+
     for level in range(height):
-        new_state = []
-        #######  YOUR CODE GOES HERE                              ######
-        #######     to hash internal nodes in the tree use the    ######
-        #######     function hash_internal_node(left,right)       ######
-        # 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-        # let's say position is 8
-        # I need to add hash position 8 and 7
-        if level_pos % 2 == 1:
-            selected_hash = hash_internal_node(state[level_pos - 1], state[level_pos])
+        #new_state = []
+
+        # 1. choose the correct siblings
+        if level_pos % 2 == 0:
+            hashes.append(new_state[level_pos + 1])
         else:
-            selected_hash = hash_internal_node(state[level_pos + 1], state[level_pos])
+            hashes.append(new_state[level_pos - 1])
+
+        level_pos = level_pos // 2
+
+        # 2. Construct the new state.
+        new_state = list(map(hash_internal_node, new_state[::2], new_state[1::2]))
+        print(len(new_state))
         
-        new_state = list(map(hash))
 
     return hashes
     
@@ -99,6 +106,8 @@ if __name__ == "__main__":
     # Bu alt satıra bizim kod yazmamız gerekiyor ki hashes döndürsün
     # hashes demek, merkle proof anlamına geliyor.
     hashes = gen_merkle_proof(leaves, pos)
+    print(hashes)
+    print(len(hashes))
 
     merkle_proof = MerkleProof(leaves[pos], pos, hashes)
     print(merkle_proof.hashes) # Şu an hashes boş dönüyor. Bizim yapmamız gereken hashes'a ekleme yapmak.
